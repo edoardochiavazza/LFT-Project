@@ -1,7 +1,7 @@
-##Progetto di Lft:  
+## Progetto di Lft:  
 
-#Esercizio 1:  
+# Esercizio 1:  
         Automi    
 
-#Esercizio 2:  
+# Esercizio 2:  
         Parser  
