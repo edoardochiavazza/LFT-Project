@@ -1,0 +1,3 @@
+# il carattere * effettua il match di zero o più caratteri
+# vengono ignorati i file class
+*.class
