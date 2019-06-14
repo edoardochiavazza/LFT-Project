@@ -51,43 +51,8 @@ public class Lexer {
                 return Token.minus;
 
             case '/':
-                readch(br);
-                if(peek == '/'){
-                    while(peek != '\n'){
-                        readch(br);
-                    }
-                }else if(peek == '*'){
-                    int state = 0;
-                    while(state != 2 && peek != (char) -1){
-                        readch(br);
-                        switch(state){
-                            case 0:
-                                if(peek != '*')
-                                    state = 0;
-                                else if(peek == '*')
-                                    state = 1;
-                                else
-                                    state = -1;
-                            break;
-
-                            case 1:
-                                if(peek == '/')
-                                    state = 2;
-                                else if(peek == '*')
-                                    state = 1;
-                                else if(peek != '/' && peek != '*')
-                                    state = 0;
-                            break;
-                        }
-                    }
-                    if(state != 2){
-                        System.err.println("ERROR: No closed comment");
-                        return null;
-                    }
-                }
-                else
-                     peek = ' ';
-                     return Token.div;
+                peek = ' ';
+                return Token.div;
 
             case ';':
                 peek = ' ';
@@ -159,11 +124,12 @@ public class Lexer {
 
             default:
                 String toReturn = "";
-                if(Character.isLetter(peek)){
-                    while(Character.isLetter(peek)){
-                        toReturn += peek;
-                        readch(br);
-                    }
+                if (Character.isLetter(peek) || Character.isDigit(peek) || peek == '_') {
+                 do {
+                     toReturn += peek;
+                     readch(br);
+                 } while(Character.isDigit(peek) || Character.isLetter(peek) || peek == '_');
+                    System.out.println ("Stringa letta: " + toReturn );
                     if(toReturn.compareTo("case") == 0)
                         return Word.casetok;
                     else if(toReturn.compareTo("when") == 0)
@@ -180,6 +146,11 @@ public class Lexer {
                         return Word.print;
                     else if(toReturn.compareTo("read") == 0)
                         return Word.read;
+                    else if(toReturn.compareTo("_") == 0){
+                        System.err.println("Error id");
+                        return null;
+                    }
+
                     else
                         return new Word(Tag.ID,toReturn);
 
