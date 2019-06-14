@@ -6,6 +6,7 @@ public class Lexer {
     public static int line = 1;
     private char peek = ' ';
 
+
     private void readch(BufferedReader br) {
         try {
             peek = (char) br.read();
@@ -50,8 +51,43 @@ public class Lexer {
                 return Token.minus;
 
             case '/':
-                peek = ' ';
-                return Token.div;
+                readch(br);
+                if(peek == '/'){
+                    while(peek != '\n'){
+                        readch(br);
+                    }
+                }else if(peek == '*'){
+                    int state = 0;
+                    while(state != 2 && peek != (char) -1){
+                        readch(br);
+                        switch(state){
+                            case 0:
+                                if(peek != '*')
+                                    state = 0;
+                                else if(peek == '*')
+                                    state = 1;
+                                else
+                                    state = -1;
+                            break;
+
+                            case 1:
+                                if(peek == '/')
+                                    state = 2;
+                                else if(peek == '*')
+                                    state = 1;
+                                else if(peek != '/' && peek != '*')
+                                    state = 0;
+                            break;
+                        }
+                    }
+                    if(state != 2){
+                        System.err.println("ERROR: No closed comment");
+                        return null;
+                    }
+                }
+                else
+                     peek = ' ';
+                     return Token.div;
 
             case ';':
                 peek = ' ';
