@@ -159,8 +159,8 @@ public class Lexer {
 
             default:
                 String toReturn = "";
-                if(Character.isLetter(peek)){
-                    while(Character.isLetter(peek)){
+                if(Character.isLetter(peek) || Character.isDigit(peek) || peek == '_'){
+                    while(Character.isDigit(peek) || Character.isLetter(peek) || peek == '_'){
                         toReturn += peek;
                         readch(br);
                     }
@@ -182,7 +182,6 @@ public class Lexer {
                         return Word.read;
                     else
                         return new Word(Tag.ID,toReturn);
-
                 } else if (Character.isDigit(peek)) {
                     while(Character.isDigit(peek)){
                         toReturn += peek;

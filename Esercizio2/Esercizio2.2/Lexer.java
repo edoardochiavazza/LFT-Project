@@ -125,11 +125,10 @@ public class Lexer {
             default:
                 String toReturn = "";
                 if (Character.isLetter(peek) || Character.isDigit(peek) || peek == '_') {
-                 do {
-                     toReturn += peek;
-                     readch(br);
-                 } while(Character.isDigit(peek) || Character.isLetter(peek) || peek == '_');
-                    System.out.println ("Stringa letta: " + toReturn );
+                    while(Character.isDigit(peek) || Character.isLetter(peek) || peek == '_'){
+                        toReturn += peek;
+                        readch(br);
+                    }
                     if(toReturn.compareTo("case") == 0)
                         return Word.casetok;
                     else if(toReturn.compareTo("when") == 0)
@@ -149,12 +148,10 @@ public class Lexer {
                     else if(toReturn.compareTo("_") == 0){
                         System.err.println("Error id");
                         return null;
-                    }
-
-                    else
+                    }else
                         return new Word(Tag.ID,toReturn);
 
-                } else if (Character.isDigit(peek)) {
+                } else if(Character.isDigit(peek)){
                     while(Character.isDigit(peek)){
                         toReturn += peek;
                         readch(br);
