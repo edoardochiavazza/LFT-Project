@@ -188,8 +188,7 @@ public class Lexer {
                         readch(br);
                     }
                     return new NumberTok(toReturn);
-	// ... gestire il caso dei numeri ... //
-                } else {
+                }else{
                         System.err.println("Erroneous character: "
                                 + peek );
                         return null;
@@ -211,5 +210,4 @@ public class Lexer {
             br.close();
         } catch (IOException e) {e.printStackTrace();}
     }
-
 }
