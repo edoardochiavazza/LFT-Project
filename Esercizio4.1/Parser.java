@@ -63,6 +63,7 @@ public class Parser {
 
           default:
           error("Error in exprp");
+	// ... completare ...
 	   }
     }
 
@@ -80,10 +81,12 @@ public class Parser {
 
             default:
             error("Error in term");
-        }
+        }// ... completare ...
+
     }
 
     private void termp() {
+        // ... completare ...
         switch(look.tag){
             case '*':
                 match('*');
@@ -106,6 +109,7 @@ public class Parser {
     }
 
     private void fact() {
+        // ... completare ...
         switch(look.tag){
             case '(':
                 match('(');
