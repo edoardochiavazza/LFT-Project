@@ -4,4 +4,9 @@
         Automi    
 
 ## Esercizio 2:  
-        Parser  
+        Lexer  
+
+## Esercizio 3:
+        Parser
+
+## Esercizio 4:

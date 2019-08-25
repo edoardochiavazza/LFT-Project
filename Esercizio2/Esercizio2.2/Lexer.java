@@ -124,7 +124,7 @@ public class Lexer {
 
             default:
                 String toReturn = "";
-                if (Character.isLetter(peek) || Character.isDigit(peek) || peek == '_') {
+                if (Character.isLetter(peek)) {
                     while(Character.isDigit(peek) || Character.isLetter(peek) || peek == '_'){
                         toReturn += peek;
                         readch(br);
@@ -141,7 +141,7 @@ public class Lexer {
                         return Word.whiletok;
                     else if(toReturn.compareTo("do") == 0)
                         return Word.dotok;
-                    else if(toReturn.compareTo("printf") == 0)
+                    else if(toReturn.compareTo("print") == 0)
                         return Word.print;
                     else if(toReturn.compareTo("read") == 0)
                         return Word.read;
