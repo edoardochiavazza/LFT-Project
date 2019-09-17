@@ -9,7 +9,7 @@ public class JavaCompiler {
 
             switch (state) {
             case 0:
-                if (ch > 64 && ch < 90 || ch > 96 && ch < 123)
+                if (ch > 64 && ch < 91 || ch > 96 && ch < 123)
                     state = 2;
                 else if (ch == 95)
                     state = 1;
@@ -18,7 +18,7 @@ public class JavaCompiler {
                 break;
 
             case 1:
-                if (ch > 64 && ch < 90 || ch > 96 && ch < 123 || ch > 47 && ch < 58 || ch == 95)
+                if (ch > 64 && ch < 91 || ch > 96 && ch < 123 || ch > 47 && ch < 58)
                     state = 2;
                 else if (ch == 95)
                     state = 1;
@@ -27,7 +27,7 @@ public class JavaCompiler {
                 break;
 
             case 2:
-                if (ch > 64 && ch < 90 || ch > 96 && ch < 123 || ch > 47 && ch < 58 || ch == 95)
+                if (ch > 64 && ch < 91 || ch > 96 && ch < 123 || ch > 47 && ch < 58 || ch == 95)
                     state = 2;
                 else
                     state = -1;
