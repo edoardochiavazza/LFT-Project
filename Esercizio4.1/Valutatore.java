@@ -30,22 +30,22 @@ public class Valutatore {
 	  int expr_val;
     if(look.tag == '(' || look.tag == Tag.NUM){
         expr_val = expr();
-    	match(Tag.EOF);
+    	  match(Tag.EOF);
         System.out.println(expr_val);
     }else
         error("Error in start symbol");
     }
 
     private int expr() {
-	int term_val, exprp_val, exprp_i;
+	  int term_val, exprp_val, exprp_i;
     if(look.tag == Tag.NUM || look.tag == '('){
         term_val = term();
         exprp_i = term_val;
-    	exprp_val = exprp(term_val);
+    	  exprp_val = exprp(term_val);
         return exprp_val;
     }else
-        error("Error in expr");
-    return -1;
+        error("Error in grammar (expr) after read " + look);
+        return -1;
     }
 
     private int exprp(int exprp_i) {
@@ -67,7 +67,7 @@ public class Valutatore {
                 exprp_val = exprp_i;
                 return exprp_val;
     default:
-               error("Error in exprp");
+               error("Error in grammar (exprp) after read " + look);
                break;
 	}
     return -1;
@@ -87,7 +87,7 @@ public class Valutatore {
             return term_val;
 
             default:
-            error("Error in term");
+            error("Error in grammar (term) after read " + look);
         }
         return -1;
     }
@@ -115,7 +115,7 @@ public class Valutatore {
                 return termp_val;
 
             default:
-            error("Error in termp");
+            error("Error in grammar (termp) after read " + look);
         }
         return -1;
     }
@@ -136,7 +136,7 @@ public class Valutatore {
                 return fact_val;
 
             default:
-                error("Error in fact");
+                error("Error in grammar (fact) after read " + look);
         }
         return -1;
     }

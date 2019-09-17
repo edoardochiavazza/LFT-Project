@@ -32,7 +32,7 @@ public class Parser {
     	match(Tag.EOF);
     }
 	else
-        error("Error in start");
+        error("Error in start symbol");
     }
 
     private void expr() {
@@ -40,7 +40,7 @@ public class Parser {
         term();
         exprp();
     }else
-        error("Error in expr");
+        error("Error in grammar (expr) after read " + look);
     }
 
     private void exprp() {
@@ -57,12 +57,13 @@ public class Parser {
            exprp();
            break;
 
+           //Epsilon transition
            case Tag.EOF:
            case')':
            break;
 
           default:
-          error("Error in exprp");
+          error("Error in grammar (expr) after read " + look);
 	   }
     }
 
@@ -79,7 +80,7 @@ public class Parser {
             break;
 
             default:
-            error("Error in term");
+            error("Error in grammar (term) after read " + look);
         }
     }
 
@@ -101,7 +102,7 @@ public class Parser {
             case Tag.EOF:
                 break;
             default:
-            error("Error in termp");
+            error("Error in grammar (termp) after read " + look);
         }
     }
 
@@ -112,12 +113,14 @@ public class Parser {
                 expr();
                 if(look.tag == ')')
                     match(')');
+                else
+                  error("Error in fact Expected ) instead " + look);
                 break;
             case Tag.NUM:
                 match(Tag.NUM);
                 break;
             default:
-                error("Error in fact");
+                error("Error in grammar (fact) after read " + look);
         }
     }
 

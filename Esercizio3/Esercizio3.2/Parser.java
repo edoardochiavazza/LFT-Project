@@ -27,28 +27,29 @@ public class Parser {
     }
 
     public void start() {
-        statlist();
-        match(Tag.EOF);
+        if(look.tag == Tag.ID || look.tag == Tag.PRINT || look.tag == Tag.READ || look.tag == Tag.CASE || look.tag == Tag.WHILE || look.tag == '{'){
+          statlist();
+          match(Tag.EOF);
+        }else
+          error("Error in grammar (start) after read " + look);
     }
 
     private void statlist(){
-        //System.out.println("Look.tag in statlist = " + look.tag);
         if(look.tag == Tag.ID || look.tag == Tag.PRINT || look.tag == Tag.READ || look.tag == Tag.CASE || look.tag == Tag.WHILE || look.tag == '{'){
             stat();
             statlisp();
         }else
-            error("Error in stalist");
+            error("Error in grammar (expr) after read " + look);
     }
 
     private void statlisp(){
-        //System.out.println("Look.tag in statlisp = " + look.tag);
         switch(look.tag){
             case ';':
                 match(';');
                 stat();
                 statlisp();
                 break;
-
+            //Epsilon transition
             case Tag.ID:
             case Tag.PRINT:
             case Tag.READ:
@@ -57,14 +58,13 @@ public class Parser {
             case '}':
             case Tag.EOF:
             break;
+
         default:
-            System.out.println("Error here");
-            error("Error in statlisp");
+            error("Error in grammar (expr) after read " + look);
         }
     }
 
     private void stat(){
-        //System.out.println("Look.tag in stat = " + look.tag);
         switch(look.tag){
             case Tag.ID:
                 match(Tag.ID);
@@ -79,14 +79,23 @@ public class Parser {
                 if(look.tag == ')')
                     match(')');
                 else
-                    error("Expected )");
+                    error("Error: (stat -> print) Expected ) instead" + look);
                 break;
 
             case Tag.READ:
                 match(Tag.READ);
-                match('(');
-                match(Tag.ID);
-                match(')');
+                if(look.tag == '(')
+                    match('(');
+                else
+                    error("Error: (stat -> read) Expected ) instead" + look);
+                if(look.tag == Tag.ID)
+                  match(Tag.ID);
+                else
+                  error("Error: (stat -> read) Expected ID instead" + look);
+                if(look.tag == ')')
+                    match(')');
+                else
+                    error("Error: (stat -> read) Expected ) instead" + look);
                 break;
 
             case Tag.CASE:
@@ -107,7 +116,7 @@ public class Parser {
                     match(')');
                     stat();
                 }else
-                    error("Expected )");
+                    error("Error (stat) expected } instead " + look);
                 break;
 
             case '{':
@@ -116,8 +125,11 @@ public class Parser {
                 if(look.tag == '}')
                     match('}');
                 else
-                    error("Expected }");
+                    error("Error (stat) expected } instead " + look);
                 break;
+
+            default:
+              error("Error in grammar (stat) after read " + look);
         }
     }
 
@@ -126,7 +138,7 @@ public class Parser {
             whenitem();
             whenlistp();
         }else
-            error("Expected when");
+            error("Error in grammar (whenlist) expected when instead " +look);
     }
 
     private void whenlistp(){
@@ -137,6 +149,9 @@ public class Parser {
             break;
             case Tag.ELSE:
             break;
+
+        default:
+        error("Error in grammar (whenlistp)");
         }
     }
 
@@ -149,9 +164,9 @@ public class Parser {
                 match(')');
                 stat();
             }else
-                error("Expected )");
+                error("Error in grammar (whenitem) expected ) instead " +look);
         }else
-            error("Expected when");
+            error("Error in grammar (whenitem) expected when instead " +look);
     }
 
     private void bexpr(){
@@ -162,7 +177,7 @@ public class Parser {
                 match(Tag.RELOP);
             expr();
         }else
-            error("Error in bexpr");
+            error("Error in grammar (bexpr) after read " +look);
     }
 
     private void expr() {
@@ -170,7 +185,7 @@ public class Parser {
             term();
             exprp();
         }else
-            error("Error in expr");
+            error("Error in grammar (expr) after read " +look);
         }
 
     private void exprp() {
@@ -196,7 +211,7 @@ public class Parser {
            break;
 
           default:
-          error("Error in exprp");
+          error("Error in grammar (exprp) after read " +look);
 	   }
     }
 
@@ -210,7 +225,7 @@ public class Parser {
             break;
 
             default:
-            error("Error in term");
+            error("Error in grammar (term) after read " +look);
         }
     }
 
@@ -226,6 +241,8 @@ public class Parser {
                 fact();
                 termp();
                 break;
+
+            //Epsilon transitions
             case ')':
             case '+':
             case '-':
@@ -235,8 +252,9 @@ public class Parser {
             case Tag.ELSE:
             case '}':
                 break;
+
             default:
-            error("Error in termp");
+            error("Error in grammar (termp) after read " +look);
         }
     }
 
@@ -247,6 +265,8 @@ public class Parser {
                 expr();
                 if(look.tag == ')')
                     match(')');
+                else
+                    error("Error in grammar (fact) expected ) instead " +look);
                 break;
             case Tag.NUM:
                 match(Tag.NUM);
@@ -255,7 +275,7 @@ public class Parser {
                 match(Tag.ID);
                 break;
             default:
-                error("Error in fact");
+                error("Error in grammar (fact) after read " +look);
         }
     }
 
