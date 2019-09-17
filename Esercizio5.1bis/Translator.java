@@ -203,7 +203,7 @@ public class Translator {
             match('(');
             b_true = code.newLabel();
             b_false = wlnext;
-            bexpr(b_true, b_false);
+            bexpr(b_false);
             if(look.tag == ')'){
                 match(')');
                 code.emitLabel(b_true);
@@ -216,39 +216,33 @@ public class Translator {
     }
 
 
-    private void bexpr(int ltrue, int lfalse) {
+    private void bexpr(int lfalse) {
 	       if(look.tag == Tag.NUM || look.tag == Tag.ID){
 		             expr();
 		             if (look == Word.eq) {
 			                match(Tag.RELOP);
 			                expr();
-                      code.emit(OpCode.if_icmpeq, ltrue);
-                      code.emit(OpCode.GOto,lfalse);
+                      code.emit(OpCode.if_icmpne, lfalse);
                 }else if(look == Word.gt){
                       match(Tag.RELOP);
                       expr();
-                      code.emit(OpCode.if_icmpgt, ltrue);
-                      code.emit(OpCode.GOto,lfalse);
+                      code.emit(OpCode.if_icmple, lfalse);
                 }else if(look == Word.lt){
                       match(Tag.RELOP);
                       expr();
-                      code.emit(OpCode.if_icmplt,ltrue);
-                      code.emit(OpCode.GOto,lfalse);
+                      code.emit(OpCode.if_icmpge,lfalse);
                 }else if(look == Word.le){
                       match(Tag.RELOP);
                       expr();
-                      code.emit(OpCode.if_icmple,ltrue);
-                      code.emit(OpCode.GOto,lfalse);
+                      code.emit(OpCode.if_icmpgt,lfalse);
                 }else if(look == Word.ne){
                       match(Tag.RELOP);
                       expr();
-                      code.emit(OpCode.if_icmpne,ltrue);
-                      code.emit(OpCode.GOto,lfalse);
+                      code.emit(OpCode.if_icmpeq,lfalse);
                 }else if(look == Word.ge){
                       match(Tag.RELOP);
                       expr();
-                      code.emit(OpCode.if_icmpge,ltrue);
-                      code.emit(OpCode.GOto,lfalse);
+                      code.emit(OpCode.if_icmplt,lfalse);
                 }else
                       error("Expected one of symbol of RELOP instead " +look);
         }
